@@ -1,0 +1,10 @@
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\bin\Release\netcoreapp2.0\Demo.deps.json
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\bin\Release\netcoreapp2.0\Demo.runtimeconfig.json
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\bin\Release\netcoreapp2.0\Demo.runtimeconfig.dev.json
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\bin\Release\netcoreapp2.0\Demo.dll
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\bin\Release\netcoreapp2.0\Demo.pdb
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\obj\Release\netcoreapp2.0\Demo.csproj.CoreCompileInputs.cache
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\obj\Release\netcoreapp2.0\Demo.AssemblyInfoInputs.cache
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\obj\Release\netcoreapp2.0\Demo.AssemblyInfo.cs
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\obj\Release\netcoreapp2.0\Demo.dll
+F:\project\coreAng\NETCoreAppWithAngular2\Demo\obj\Release\netcoreapp2.0\Demo.pdb

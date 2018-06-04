@@ -1,0 +1,81 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
+using Demo.Data;
+using Demo.DTOs;
+using Demo.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+
+namespace Demo.Controllers {
+    [Route ("/api/[controller]")]
+    public class AuthController : Controller {
+        private readonly IAuthRepository _repo;
+        public readonly IConfiguration _config;
+        
+        private readonly IMapper _mapper;
+
+        public AuthController (IAuthRepository repo,IMapper mapper, IConfiguration config) {
+            _mapper = mapper;
+            _config = config;
+            _repo = repo;
+        }
+
+        [HttpPost ("register")]
+        public async Task<IActionResult> Register ([FromBody] UserForRegisterDto userForRegisterDto) {
+
+            if(!string.IsNullOrEmpty(userForRegisterDto.Username))
+            userForRegisterDto.Username = userForRegisterDto.Username.ToLower ();
+
+            if (await _repo.UserExists (userForRegisterDto.Username))
+                ModelState.AddModelError ("Username", "Username allredy exists");
+
+            if (!ModelState.IsValid)
+                return BadRequest (ModelState);
+
+            var userToCreate = new User {
+                Username = userForRegisterDto.Username
+            };
+            var createdUser = await _repo.Register (userToCreate, userForRegisterDto.Password);
+
+            return StatusCode (201);
+
+        }
+
+        [HttpPost ("login")]
+        public async Task<IActionResult> Login ([FromBody] UserForLoginDto userForLoginDto) {
+
+         
+
+            var userFormRepo = await _repo.Login (userForLoginDto.Username.ToLower (), userForLoginDto.Password);
+
+            if (userFormRepo == null)
+                return Unauthorized ();
+
+            var tockenHandler = new JwtSecurityTokenHandler ();
+            var key = Encoding.ASCII.GetBytes (_config.GetSection ("AppSettings:Token").Value);
+            var tokenDescripton = new SecurityTokenDescriptor {
+                Subject = new ClaimsIdentity (new Claim[] {
+                new Claim (ClaimTypes.NameIdentifier, userFormRepo.Id.ToString ()),
+                new Claim (ClaimTypes.Name, userFormRepo.Username)
+                }),
+                Expires = DateTime.Now.AddDays (1),
+                SigningCredentials = new SigningCredentials (new SymmetricSecurityKey (key),
+                SecurityAlgorithms.HmacSha512Signature)
+
+            };
+            var token = tockenHandler.CreateToken (tokenDescripton);
+            var tokenString = tockenHandler.WriteToken (token);
+
+            var user = _mapper.Map<UserForListDto>(userFormRepo);
+
+            return Ok (new { tokenString, user });
+
+        }
+
+    }
+}
