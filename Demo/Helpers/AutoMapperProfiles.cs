@@ -24,6 +24,8 @@ namespace Demo.Helpers {
             CreateMap<UserForUpdateDto, User>();
             CreateMap<PhotoForCreationDto, Photo>();
             CreateMap<Photo, PhotoFromReturnDto>();
+            CreateMap<UserForRegisterDto, User>();
+
         }
     }
 }
